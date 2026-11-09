@@ -1,0 +1,50 @@
+
+{% extends 'cars/base.html' %}
+
+{% block title %}Enquire About {{ car.manufacturer }} {{ car.name }} | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="form-container">
+
+            <span class="hero-label">Get in Touch</span>
+
+            <h1>Enquire About This Car</h1>
+
+            <p>
+                Interested in the
+                <strong>{{ car.manufacturer }} {{ car.name }}</strong>?
+                Complete the form below, and our team can follow up
+                with you.
+            </p>
+
+            <div class="enquiry-car-summary">
+                <h3>{{ car.manufacturer }} {{ car.name }}</h3>
+                <p>Year: {{ car.year }}</p>
+                <p>Price: ₦{{ car.price|floatformat:2 }}</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="button">
+                    Submit Enquiry
+                </button>
+            </form>
+
+            <a href="{% url 'car_detail' car.id %}" class="back-link">
+                &larr; Back to Vehicle Details
+            </a>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+

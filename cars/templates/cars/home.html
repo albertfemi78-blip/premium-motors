@@ -1,0 +1,125 @@
+{% extends 'cars/base.html' %}
+
+{% block title %}Home | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+
+
+        <span class="hero-label">
+            Welcome to Premium Motors
+        </span>
+
+        <h1>
+            Discover Your <span>Perfect Drive.</span>
+        </h1>
+
+        <p>
+            Explore our collection of quality vehicles, carefully
+            selected to deliver comfort, performance, and value.
+            Your next journey starts with the right car.
+        </p>
+
+        <div class="hero-actions">
+            <a href="{% url 'car_list' %}" class="button">
+                Browse Our Cars
+            </a>
+
+            <a href="{% url 'about' %}" class="button-outline">
+                Learn About Us
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+</section>
+
+<section class="page-section">
+    <div class="container section-heading">
+        <h2>Find the Right Car for You</h2>
+
+
+    <p>
+        From everyday comfort to exceptional performance,
+        explore vehicles that suit your lifestyle.
+    </p>
+
+    <br>
+
+    <a href="{% url 'car_list' %}" class="button">
+        View Available Cars
+    </a>
+</div>
+
+
+</section>
+
+<!-- Featured Cars Section -->
+
+<section class="page-section">
+    <div class="container">
+
+
+    <div class="section-heading">
+        <h2>Featured Cars</h2>
+        <p>Explore some of the latest vehicles in our collection.</p>
+    </div>
+
+    <div class="car-grid">
+
+        {% for car in cars %}
+
+            <div class="car-card">
+
+                {% if car.image %}
+                    <img src="{{ car.image.url }}" alt="{{ car.manufacturer }} {{ car.name }}">
+                {% else %}
+                    <div class="car-placeholder">
+                        No image available
+                    </div>
+                {% endif %}
+
+                <div class="car-card-content">
+
+                    <h3>{{ car.manufacturer }} {{ car.name }}</h3>
+
+                    <p>Year: {{ car.year }}</p>
+
+                    <p>Condition: {{ car.condition }}</p>
+
+                    <h4>₦{{ car.price|floatformat:2 }}</h4>
+
+                    <a href="{% url 'car_detail' car.id %}" class="button">
+                        View Details
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p>No cars are currently available. Please check back later.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="section-heading">
+        <br>
+        <a href="{% url 'car_list' %}" class="button">
+            View All Cars
+        </a>
+    </div>
+
+</div>
+
+
+</section>
+
+{% endblock %}

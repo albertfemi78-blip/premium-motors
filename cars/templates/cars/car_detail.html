@@ -1,0 +1,151 @@
+{% extends 'cars/base.html' %}
+
+{% block title %}{{ car.manufacturer }} {{ car.name }} | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <a href="{% url 'car_list' %}" class="back-link">
+            &larr; Back to All Cars
+        </a>
+
+        <div class="car-detail-layout">
+
+           <!-- CAR IMAGES -->
+<div class="car-detail-image">
+
+    <!-- Main Car Image -->
+    <div class="main-car-image">
+        {% if car.image %}
+            <img
+                src="{{ car.image.url }}"
+                alt="{{ car.manufacturer }} {{ car.name }}"
+            >
+        {% else %}
+            <div class="car-image-placeholder">
+                Image coming soon
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Additional Car Images -->
+    {% if car.images.all %}
+        <div class="car-gallery">
+
+            {% for car_image in car.images.all %}
+
+                {% if car_image.image %}
+                    <div class="gallery-item">
+                        <img
+                            src="{{ car_image.image.url }}"
+                            alt="{{ car.manufacturer }} {{ car.name }} - Image {{ forloop.counter }}"
+                        >
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+    {% endif %}
+
+</div>
+
+
+            <!-- CAR INFORMATION -->
+            <div class="car-detail-info">
+
+                <span class="hero-label">Vehicle Details</span>
+
+                <h1>{{ car.manufacturer }} {{ car.name }}</h1>
+
+                <p class="car-price">
+                    ₦{{ car.price|floatformat:2 }}
+                </p>
+
+                <p class="availability">
+                    {% if car.is_available %}
+                        Available for purchase
+                    {% else %}
+                        Currently unavailable
+                    {% endif %}
+                </p>
+
+                <hr>
+
+                <!-- SPECIFICATIONS -->
+                <h3>Specifications</h3>
+
+                <div class="specification-grid">
+
+                    <div class="specification-item">
+                        <span>Year</span>
+                        <strong>{{ car.year }}</strong>
+                    </div>
+
+                    <div class="specification-item">
+                        <span>Manufacturer</span>
+                        <strong>{{ car.manufacturer }}</strong>
+                    </div>
+
+                    <div class="specification-item">
+                        <span>Condition</span>
+                        <strong>{{ car.condition }}</strong>
+                    </div>
+
+                    <div class="specification-item">
+                        <span>Transmission</span>
+                        <strong>{{ car.transmission }}</strong>
+                    </div>
+
+                    <div class="specification-item">
+                        <span>Fuel Type</span>
+                        <strong>{{ car.fuel_type }}</strong>
+                    </div>
+
+                    <div class="specification-item">
+                        <span>Colour</span>
+                        <strong>{{ car.colour|default:"Not specified" }}</strong>
+                    </div>
+
+                    <div class="specification-item">
+                        <span>Mileage</span>
+                        <strong>
+                            {% if car.mileage %}
+                                {{ car.mileage }} km
+                            {% else %}
+                                Not specified
+                            {% endif %}
+                        </strong>
+                    </div>
+
+                </div>
+
+                <hr>
+
+                <!-- VEHICLE DESCRIPTION -->
+                <h3>About This Vehicle</h3>
+
+                <p class="car-description">
+                    {{ car.description|default:"Contact us to learn more about this vehicle."|linebreaksbr }}
+                </p>
+
+                <!-- ENQUIRY BUTTON -->
+                {% if car.is_available %}
+                    <a
+                        href="{% url 'car_enquiry' car.id %}"
+                        class="button enquiry-button"
+                    >
+                        Enquire About This Car
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

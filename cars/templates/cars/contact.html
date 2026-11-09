@@ -1,0 +1,80 @@
+{% extends 'cars/base.html' %}
+
+{% block title %}Contact Us | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+
+    <div class="section-heading">
+        <span class="hero-label">Get in Touch</span>
+        <h2>Contact Premium Motors</h2>
+        <p>
+            Have questions about a vehicle or our services?
+            Our team is ready to assist you.
+        </p>
+    </div>
+
+    <div class="contact-layout">
+
+        <div class="contact-info">
+            <h3>Let's Talk Cars</h3>
+
+            <p>
+                Whether you're looking for your next vehicle
+                or need more information about our inventory,
+                we'd love to hear from you.
+            </p>
+
+            <div class="contact-item">
+                <h4>Phone Number</h4>
+                <p>
+                    <a href="tel:+2348012345678">
+                        +234 801 234 5678
+                    </a>
+                </p>
+            </div>
+
+            <div class="contact-item">
+                <h4>Email Address</h4>
+                <p>
+                    <a href="mailto:premiummotors@gmail.com">
+                        premiummotors@gmail.com
+                    </a>
+                </p>
+            </div>
+
+            <div class="contact-item">
+                <h4>Business</h4>
+                <p>Premium Motors Automobile Dealership</p>
+            </div>
+
+            <a href="{% url 'car_list' %}" class="button">
+                Browse Available Cars
+            </a>
+        </div>
+
+        <div class="contact-message">
+            <h3>We're Here to Help</h3>
+
+            <p>
+                Interested in a particular vehicle?
+                Visit our inventory, explore the available cars
+                and submit an enquiry about your preferred vehicle.
+            </p>
+
+            <a href="{% url 'car_list' %}" class="back-link">
+                Explore Our Inventory &rarr;
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+{% endblock %}

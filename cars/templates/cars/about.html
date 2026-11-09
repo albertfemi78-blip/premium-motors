@@ -1,0 +1,67 @@
+
+{% extends 'cars/base.html' %}
+
+{% block title %}About Us | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+
+            <span class="hero-label">Who We Are</span>
+
+            <h1>Driven by Quality.<br><span>Built on Trust.</span></h1>
+
+            <p>
+                At Premium Motors, we help customers discover
+                quality vehicles that suit their needs, preferences,
+                and budgets.
+            </p>
+
+            <a href="{% url 'car_list' %}" class="button">
+                Explore Our Inventory
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<section class="page-section">
+    <div class="container about-content">
+
+        <div>
+            <span class="hero-label">Our Story</span>
+
+            <h2>Making Your Next Car Purchase Easier</h2>
+
+            <p>
+                We believe choosing a car should be a straightforward
+                and enjoyable experience. Our website allows visitors
+                to explore available vehicles, review specifications,
+                and contact us about cars that interest them.
+            </p>
+
+            <p>
+                Whether you're looking for everyday comfort or a
+                vehicle that matches your driving ambitions, we're
+                here to help you explore your options.
+            </p>
+        </div>
+
+        <div class="about-highlight">
+            <h3>Why Explore Premium Motors?</h3>
+
+            <ul>
+                <li>Browse available vehicles in one place.</li>
+                <li>Review specifications and pricing.</li>
+                <li>Submit enquiries about individual vehicles.</li>
+                <li>Find information to help guide your decision.</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+

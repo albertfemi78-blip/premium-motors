@@ -1,0 +1,46 @@
+
+{% extends 'cars/base.html' %}
+
+{% block title %}Enquiry Submitted | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+    <div class="container">
+
+        <div class="success-card">
+
+            <div class="success-icon">&#10003;</div>
+
+            <span class="hero-label">Submission Successful</span>
+
+            <h1>Thank You for Your Enquiry!</h1>
+
+            <p>
+                Your enquiry about the
+                <strong>{{ car.manufacturer }} {{ car.name }}</strong>
+                has been submitted successfully.
+            </p>
+
+            <p>
+                Thank you for your interest in Premium Motors.
+                We appreciate you reaching out to us.
+            </p>
+
+            <div class="success-actions">
+                <a href="{% url 'car_list' %}" class="button">
+                    Browse More Cars
+                </a>
+
+                <a href="{% url 'home' %}" class="button-outline-dark">
+                    Return Home
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+

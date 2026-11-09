@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Premium Motors{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'cars/images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="site-header">
+        <div class="container nav-container">
+
+            <a href="{% url 'home' %}" class="logo">
+                <img
+                    src="{% static 'cars/images/premium-motors-logo.png' %}"
+                    alt="Premium Motors"
+                >
+            </a>
+
+            <nav class="nav-links">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'car_list' %}">Browse Cars</a>
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="{% url 'contact' %}">Contact</a>
+            </nav>
+
+            <a href="{% url 'car_list' %}" class="nav-button">
+                Explore Cars
+            </a>
+
+        </div>
+    </header>
+
+
+    <!-- Main page content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+
+            <div class="footer-brand">
+
+                <a href="{% url 'home' %}" class="logo footer-logo">
+                    <img
+                        src="{% static 'cars/images/premium-motors-logo.png' %}"
+                        alt="Premium Motors"
+                    >
+                </a>
+
+                <p>Your destination for quality vehicles.</p>
+
+            </div>
+
+            <div class="footer-links">
+                <a href="{% url 'about' %}">About Us</a>
+                <a href="{% url 'contact' %}">Contact</a>
+                <a href="{% url 'car_list' %}">Browse Cars</a>
+            </div>
+
+            <p class="copyright">
+                &copy; {% now "Y" %} Premium Motors.
+                All rights reserved.
+            </p>
+
+        </div>
+    </footer>
+
+</body>
+</html>
