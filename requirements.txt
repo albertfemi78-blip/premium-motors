@@ -1,1 +1,2 @@
 python-dotenv==1.2.4
+cloudinary==1.47.0
