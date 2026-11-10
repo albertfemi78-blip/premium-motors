@@ -29,3 +29,7 @@ staticfiles/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+
+# Database export backups
+premium_motors_data.json
