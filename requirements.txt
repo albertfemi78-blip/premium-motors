@@ -7,3 +7,4 @@ psycopg[binary]
 python-dotenv==1.2.4
 cloudinary==1.47.0
 mysqlclient==2.3.0
+requests==2.32.5
