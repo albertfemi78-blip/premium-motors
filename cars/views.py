@@ -2,7 +2,7 @@ import os
 import resend
 
 from django.shortcuts import render, get_object_or_404
-from django.conf import settings
+
 
 from .models import Car
 from .forms import CarEnquiryForm
@@ -92,7 +92,7 @@ def car_enquiry(request, car_id):
 
                 resend.Emails.send({
                     "from": "Premium Motors <onboarding@resend.dev>",
-                    "to": [settings.EMAIL_HOST_USER],
+                    "to": [os.getenv('RESEND_TO_EMAIL')],
                     "subject": business_subject,
                     "html": business_message
                 })
