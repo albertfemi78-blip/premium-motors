@@ -1,5 +1,7 @@
+import os
+import resend
+
 from django.shortcuts import render, get_object_or_404
-from django.core.mail import send_mail
 from django.conf import settings
 
 from .models import Car
@@ -55,93 +57,52 @@ def car_enquiry(request, car_id):
             enquiry.car = car
             enquiry.save()
 
-            # Customer confirmation email
-            customer_subject = (
-                f"Your Enquiry About {car.manufacturer} {car.name}"
-            )
-
-            customer_message = f"""
-Hello {enquiry.full_name},
-
-Thank you for contacting Premium Motors!
-
-We have successfully received your enquiry about:
-
-Car: {car.year} {car.manufacturer} {car.name}
-Price: NGN {car.price:,.2f}
-
-Your enquiry details:
-{enquiry.message}
-
-Our team appreciates your interest in this vehicle.
-We will review your enquiry and get back to you as soon as possible.
-
-Thank you for choosing Premium Motors.
-
-Best regards,
-Premium Motors Team
-"""
-
-            email_sent = False
+            # Send business notification using Resend
+            notification_sent = False
 
             try:
-                send_mail(
-                    customer_subject,
-                    customer_message,
-                    None,
-                    [enquiry.email],
-                    fail_silently=False
+                resend.api_key = os.getenv('RESEND_API_KEY')
+
+                if not resend.api_key:
+                    raise ValueError("RESEND_API_KEY is not configured.")
+
+                business_subject = (
+                    f"New Car Enquiry - {car.manufacturer} {car.name}"
                 )
 
-                email_sent = True
+                business_message = f"""
+                <h2>New Car Enquiry - Premium Motors</h2>
 
-            except Exception as error:
-                print("Customer email failed:", error)
+                <h3>Customer Details</h3>
+                <p><strong>Name:</strong> {enquiry.full_name}</p>
+                <p><strong>Email:</strong> {enquiry.email}</p>
+                <p><strong>Phone:</strong> {enquiry.phone}</p>
 
-            # Premium Motors business notification
-            business_subject = (
-                f"New Car Enquiry - {car.manufacturer} {car.name}"
-            )
+                <h3>Car Details</h3>
+                <p><strong>Car:</strong> {car.year} {car.manufacturer} {car.name}</p>
+                <p><strong>Price:</strong> NGN {car.price:,.2f}</p>
 
-            business_message = f"""
-Hello Premium Motors,
+                <h3>Customer Message</h3>
+                <p>{enquiry.message}</p>
 
-A new car enquiry has been submitted through your website.
+                <p>Please contact this customer as soon as possible.</p>
 
-CUSTOMER DETAILS
+                <p>Premium Motors Website Notification</p>
+                """
 
-Name: {enquiry.full_name}
-Email: {enquiry.email}
-Phone: {enquiry.phone}
+                resend.Emails.send({
+                    "from": "Premium Motors <onboarding@resend.dev>",
+                    "to": [settings.EMAIL_HOST_USER],
+                    "subject": business_subject,
+                    "html": business_message
+                })
 
-CAR DETAILS
-
-Car: {car.year} {car.manufacturer} {car.name}
-Price: NGN {car.price:,.2f}
-
-CUSTOMER MESSAGE
-
-{enquiry.message}
-
-Please contact this customer as soon as possible.
-
-Premium Motors
-Website Enquiry Notification
-"""
-
-            try:
-                send_mail(
-                    business_subject,
-                    business_message,
-                    None,
-                    [settings.EMAIL_HOST_USER],
-                    fail_silently=False
-                )
+                notification_sent = True
 
                 print("Business notification sent successfully.")
 
             except Exception as error:
-                print("Business notification failed:", error)
+                print("Resend notification failed:", error)
 
             # Display enquiry success page
             return render(
@@ -149,7 +110,8 @@ Website Enquiry Notification
                 'cars/enquiry_success.html',
                 {
                     'car': car,
-                    'email_sent': email_sent
+                    'email_sent': False,
+                    'notification_sent': notification_sent
                 }
             )
 

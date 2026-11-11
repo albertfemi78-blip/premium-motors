@@ -7,62 +7,49 @@
 <section class="page-section">
     <div class="container">
 
+        <div class="success-card">
 
-    <div class="success-card">
+            <div class="success-icon">&#10003;</div>
 
-        <div class="success-icon">&#10003;</div>
+            <span class="hero-label">Submission Successful</span>
 
-        <span class="hero-label">Submission Successful</span>
+            <h1>Thank You for Your Enquiry!</h1>
 
-        <h1>Thank You for Your Enquiry!</h1>
+            <p>
+                Your enquiry about
+                <strong>
+                    {{ car.year }} {{ car.manufacturer }} {{ car.name }}
+                </strong>
+                has been submitted successfully.
+            </p>
 
-        <p>
-            Your enquiry about the
-            <strong>{{ car.year }} {{ car.manufacturer }} {{ car.name }}</strong>
-            has been submitted successfully.
-        </p>
+            <p>
+                Thank you for your interest in Premium Motors.
+                Our team will review your enquiry and contact you
+                as soon as possible.
+            </p>
 
-        <p>
-            Thank you for your interest in Premium Motors.
-            Our team appreciates you reaching out to us.
-        </p>
-
-        {% if email_sent %}
             <div class="email-notice email-success">
-                <strong>Confirmation Email Sent!</strong>
+                <strong>Enquiry Received!</strong>
                 <p>
-                    We have sent a confirmation email to your email address.
-                    Please check your inbox or spam folder.
+                    Your enquiry has been saved successfully.
+                    We appreciate your interest in Premium Motors.
                 </p>
             </div>
-        {% else %}
-            <div class="email-notice email-warning">
-                <strong>Email Notification Pending</strong>
-                <p>
-                    Your enquiry has been received successfully, but we
-                    couldn't send your confirmation email right now.
-                    Please rest assured that your enquiry has been saved.
-                </p>
+
+            <div class="success-actions">
+                <a href="{% url 'car_list' %}" class="button">
+                    Browse More Cars
+                </a>
+
+                <a href="{% url 'home' %}" class="button-outline-dark">
+                    Return Home
+                </a>
             </div>
-        {% endif %}
-
-        <div class="success-actions">
-
-            <a href="{% url 'car_list' %}" class="button">
-                Browse More Cars
-            </a>
-
-            <a href="{% url 'home' %}" class="button-outline-dark">
-                Return Home
-            </a>
 
         </div>
 
     </div>
-
-</div>
-
-
 </section>
 
 {% endblock %}
