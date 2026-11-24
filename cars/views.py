@@ -281,17 +281,19 @@ def forgot_password(request):
             )
 
             try:
-                send_mail(
-                    subject='Premium Motors - Password Reset OTP',
-                    message=(
-                        f'Your password reset OTP is: {otp}\n\n'
-                        'This code expires in 5 minutes. '
-                        'If you did not request this, ignore this email.'
-                    ),
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[user.email],
-                    fail_silently=False,
-                )
+                resend.Emails.send({
+                "from": "Premium Motors <onboarding@resend.dev>",
+                "to": [user.email],
+                "subject": "Premium Motors - Password Reset OTP",
+                "html": f"""
+                    <h2>Password Reset Request</h2>
+                    <p>Your Premium Motors verification code is:</p>
+                    <h1 style="letter-spacing: 8px;">{otp}</h1>
+                    <p>This code expires in 5 minutes.</p>
+                    <p>If you did not request this, ignore this email.</p>
+                """
+            })
+                
             except Exception:
                 messages.error(
                     request,
