@@ -15,7 +15,7 @@ import random
 import hashlib
 from datetime import timedelta
 import logging
-
+import secrets
 logger = logging.getLogger(__name__)
 from django.utils import timezone
 from django.contrib.auth.models import User
