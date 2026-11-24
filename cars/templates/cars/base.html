@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{% block title %}Premium Motors{% endblock %}</title>
+
     <link rel="icon" type="image/png" href="{% static 'cars/images/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
@@ -24,18 +25,67 @@
             </a>
 
             <nav class="nav-links">
+
                 <a href="{% url 'home' %}">Home</a>
+
                 <a href="{% url 'car_list' %}">Browse Cars</a>
+
                 <a href="{% url 'about' %}">About Us</a>
+
                 <a href="{% url 'contact' %}">Contact</a>
+
+                {% if user.is_authenticated %}
+
+                    <a href="{% url 'customer_dashboard' %}">
+                        My Dashboard
+                    </a>
+
+                {% else %}
+
+                    <a href="{% url 'login' %}">Login</a>
+
+                    <a href="{% url 'register' %}">Register</a>
+
+                {% endif %}
+
             </nav>
 
-            <a href="{% url 'car_list' %}" class="nav-button">
-                Explore Cars
-            </a>
+            {% if user.is_authenticated %}
+
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+
+                    <button type="submit" class="nav-button">
+                        Logout
+                    </button>
+                </form>
+
+            {% else %}
+
+                <a href="{% url 'car_list' %}" class="nav-button">
+                    Explore Cars
+                </a>
+
+            {% endif %}
 
         </div>
     </header>
+
+
+    <!-- Django Messages -->
+    {% if messages %}
+        <div class="container messages-container">
+
+            {% for message in messages %}
+
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+    {% endif %}
 
 
     <!-- Main page content -->
@@ -47,15 +97,18 @@
 
     <!-- Footer -->
     <footer class="site-footer">
+
         <div class="container footer-content">
 
             <div class="footer-brand">
 
                 <a href="{% url 'home' %}" class="logo footer-logo">
+
                     <img
                         src="{% static 'cars/images/premium-motors-logo.png' %}"
                         alt="Premium Motors"
                     >
+
                 </a>
 
                 <p>Your destination for quality vehicles.</p>
@@ -63,9 +116,27 @@
             </div>
 
             <div class="footer-links">
+
                 <a href="{% url 'about' %}">About Us</a>
+
                 <a href="{% url 'contact' %}">Contact</a>
+
                 <a href="{% url 'car_list' %}">Browse Cars</a>
+
+                {% if user.is_authenticated %}
+
+                    <a href="{% url 'customer_dashboard' %}">
+                        My Dashboard
+                    </a>
+
+                {% else %}
+
+                    <a href="{% url 'login' %}">Login</a>
+
+                    <a href="{% url 'register' %}">Register</a>
+
+                {% endif %}
+
             </div>
 
             <p class="copyright">
@@ -74,6 +145,7 @@
             </p>
 
         </div>
+
     </footer>
 
 </body>

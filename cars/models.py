@@ -1,7 +1,8 @@
 from django.db import models
-
-# Create your models here.
-
+from django.conf import settings
+import hashlib
+from django.utils import timezone
+from datetime import timedelta
 
 
 class Car(models.Model):
@@ -67,9 +68,25 @@ class Car(models.Model):
 
 class CarEnquiry(models.Model):
 
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Reviewed', 'Reviewed'),
+        ('Contacted', 'Contacted'),
+        ('Completed', 'Completed'),
+    ]
+
     car = models.ForeignKey(
         Car,
         on_delete=models.CASCADE,
+        related_name='enquiries'
+    )
+
+    # Connect enquiries to registered customers
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name='enquiries'
     )
 
@@ -80,6 +97,12 @@ class CarEnquiry(models.Model):
     phone = models.CharField(max_length=20)
 
     message = models.TextField()
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='Pending'
+    )
 
     date_submitted = models.DateTimeField(auto_now_add=True)
 
@@ -101,3 +124,20 @@ class CarImage(models.Model):
 
     def __str__(self):
         return f"Image of {self.car}"
+class PasswordResetOTP(models.Model):
+    email = models.EmailField()
+    otp_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    attempts = models.PositiveIntegerField(default=0)
+    is_used = models.BooleanField(default=False)
+
+    def is_valid(self):
+        return (
+            not self.is_used
+            and timezone.now() < self.expires_at
+            and self.attempts < 5
+        )
+
+    def __str__(self):
+        return f"Password reset OTP for {self.email}"

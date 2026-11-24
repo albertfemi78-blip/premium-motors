@@ -1,0 +1,38 @@
+{% extends 'cars/base.html' %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-container">
+
+        <div class="auth-header">
+            <h2>Verify Your Email</h2>
+            <p>Enter the 6-digit OTP sent to your email address.</p>
+        </div>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Verification Code</label>
+
+                <input
+                    type="text"
+                    name="otp"
+                    placeholder="Enter 6-digit OTP"
+                    maxlength="6"
+                    pattern="[0-9]{6}"
+                    inputmode="numeric"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="auth-button">
+                Verify OTP
+            </button>
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

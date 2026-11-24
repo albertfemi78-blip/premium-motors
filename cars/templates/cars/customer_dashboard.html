@@ -1,0 +1,129 @@
+{% extends 'cars/base.html' %}
+
+{% block title %}My Dashboard | Premium Motors{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-section">
+
+    <div class="container">
+
+        <div class="dashboard-header">
+
+            <div>
+                <h1>Welcome, {{ user.first_name|default:user.username }}!</h1>
+                <p>Manage your account and track your car enquiries.</p>
+            </div>
+
+            <a href="{% url 'car_list' %}" class="dashboard-action">
+                Browse Cars
+            </a>
+
+        </div>
+
+
+        <!-- Dashboard Statistics -->
+
+        <div class="dashboard-stats">
+
+            <div class="stat-card">
+                <h3>Total Enquiries</h3>
+                <p>{{ total_enquiries }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <p>{{ pending_enquiries }}</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Reviewed</h3>
+                <p>{{ reviewed_enquiries }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- Customer Enquiry History -->
+
+        <div class="dashboard-content">
+
+            <h2>My Car Enquiries</h2>
+
+            {% if enquiries %}
+
+                <div class="table-wrapper">
+
+                    <table class="enquiry-table">
+
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Price</th>
+                                <th>Date Submitted</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for enquiry in enquiries %}
+
+                                <tr>
+
+                                    <td>
+                                        {{ enquiry.car.year }}
+                                        {{ enquiry.car.manufacturer }}
+                                        {{ enquiry.car.name }}
+                                    </td>
+
+                                    <td>
+                                        NGN {{ enquiry.car.price|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        {{ enquiry.date_submitted|date:"M d, Y" }}
+                                    </td>
+
+                                    <td>
+                                        <span class="status-badge status-{{ enquiry.status|lower }}">
+                                            {{ enquiry.status }}
+                                        </span>
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-dashboard">
+
+                    <h3>No enquiries yet</h3>
+
+                    <p>
+                        You haven't submitted any car enquiries.
+                        Browse our available vehicles and find your next car.
+                    </p>
+
+                    <a href="{% url 'car_list' %}" class="dashboard-action">
+                        Explore Available Cars
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
