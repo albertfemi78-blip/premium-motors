@@ -14,7 +14,9 @@ from .forms import CarEnquiryForm, UserRegisterForm
 import random
 import hashlib
 from datetime import timedelta
+import logging
 
+logger = logging.getLogger(__name__)
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -443,34 +445,45 @@ def reset_new_password(request):
     return render(request, 'cars/reset_new_password.html')
 @csrf_exempt
 @require_POST
-
 def recover_admin(request):
-    token = request.POST.get('token', '')
+    try:
+        token = request.POST.get('token', '')
+        expected_token = os.getenv('ADMIN_RECOVERY_TOKEN', '')
 
-    expected_token = os.getenv('ADMIN_RECOVERY_TOKEN', '')
+        if not expected_token or not secrets.compare_digest(
+            token, expected_token
+        ):
+            return HttpResponse('Unauthorized', status=403)
 
-    if not expected_token or not secrets.compare_digest(
-        token, expected_token
-    ):
-        return HttpResponse('Unauthorized', status=403)
+        username = os.getenv('ADMIN_USERNAME')
+        email = os.getenv('ADMIN_EMAIL')
+        password = os.getenv('ADMIN_PASSWORD')
 
-    username = os.getenv('ADMIN_USERNAME')
-    email = os.getenv('ADMIN_EMAIL')
-    password = os.getenv('ADMIN_PASSWORD')
+        if not all([username, email, password]):
+            return HttpResponse(
+                'Admin environment variables are missing.',
+                status=500
+            )
 
-    if not all([username, email, password]):
-        return HttpResponse('Admin environment variables are missing.', status=500)
+        user, created = User.objects.get_or_create(
+            username=username,
+            defaults={'email': email}
+        )
 
-    user, created = User.objects.get_or_create(
-        username=username,
-        defaults={'email': email}
-    )
+        user.email = email
+        user.is_active = True
+        user.is_staff = True
+        user.is_superuser = True
+        user.set_password(password)
+        user.save()
 
-    user.email = email
-    user.is_active = True
-    user.is_staff = True
-    user.is_superuser = True
-    user.set_password(password)
-    user.save()
+        return HttpResponse(
+            'Admin account successfully created or recovered.'
+        )
 
-    return HttpResponse('Admin account successfully created or recovered.')
+    except Exception:
+        logger.exception("Admin recovery failed")
+        return HttpResponse(
+            'Admin recovery failed. Check server logs.',
+            status=500
+        )
