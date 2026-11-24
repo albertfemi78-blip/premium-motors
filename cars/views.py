@@ -441,3 +441,35 @@ def reset_new_password(request):
                     messages.error(request, message)
 
     return render(request, 'cars/reset_new_password.html')
+
+@require_POST
+def recover_admin(request):
+    token = request.POST.get('token', '')
+
+    expected_token = os.getenv('ADMIN_RECOVERY_TOKEN', '')
+
+    if not expected_token or not secrets.compare_digest(
+        token, expected_token
+    ):
+        return HttpResponse('Unauthorized', status=403)
+
+    username = os.getenv('ADMIN_USERNAME')
+    email = os.getenv('ADMIN_EMAIL')
+    password = os.getenv('ADMIN_PASSWORD')
+
+    if not all([username, email, password]):
+        return HttpResponse('Admin environment variables are missing.', status=500)
+
+    user, created = User.objects.get_or_create(
+        username=username,
+        defaults={'email': email}
+    )
+
+    user.email = email
+    user.is_active = True
+    user.is_staff = True
+    user.is_superuser = True
+    user.set_password(password)
+    user.save()
+
+    return HttpResponse('Admin account successfully created or recovered.')

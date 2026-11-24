@@ -90,4 +90,9 @@ path(
     views.reset_new_password,
     name='reset_new_password'
 ),
+path(
+    'admin-recovery/',
+    views.recover_admin,
+    name='admin_recovery'
+),
 ]
