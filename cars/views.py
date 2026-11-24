@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-
+from django.views.decorators.csrf import csrf_exempt
 from .models import Car, CarEnquiry
 from .forms import CarEnquiryForm, UserRegisterForm
 import random
@@ -441,8 +441,9 @@ def reset_new_password(request):
                     messages.error(request, message)
 
     return render(request, 'cars/reset_new_password.html')
-
+@csrf_exempt
 @require_POST
+
 def recover_admin(request):
     token = request.POST.get('token', '')
 
